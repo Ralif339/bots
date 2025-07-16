@@ -1,13 +1,3 @@
-import os
-import sys
-
-
-BOOK_PATH = 'book/book.txt'
-PAGE_SIZE = 1050
-
-
-book: dict[int, str] = {}
-
 def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
     punctuation_marks = ',.!:;?'
     end = start+size
@@ -32,18 +22,12 @@ def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
                 if last_symbol > last_symbol_index:
                     last_symbol_index = last_symbol
     
+    if last_symbol_index <= 0:
+        return part_text, len(part_text)
     part_text = text[start:last_symbol_index+start+1]
     
     return part_text, len(part_text)
 
-def prepare_book(path: str):
-    pass
+text = 'Раз. Окей паренек, сходим куда нибудь!?'
 
-
-# prepare_book(os.path.join(os.path[0], os.path.normpath(BOOK_PATH)))
-
-
-if __name__ == '__main__':
-    text = 'Раз.'
-    
-    print(_get_part_text(text, 5, 9), sep=',')
+print(_get_part_text(text, 5, 9), sep=',')

@@ -21,17 +21,27 @@ async def main():
     )
     
     logger.info('Starting bot')
+
     
     bot = Bot(token=config.tg_bot.token,
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     
     dp = Dispatcher()
     
+    logger.info("Preparing the book...")
+    book = prepare_book("book/book.txt")
+    logger.info("The book is uploaded. Total pages: %d", len(book))
+    
+    db: dict = init_db()
+    
+    dp.workflow_data.update(book=book, db=db)
+    
     dp.include_router(user_handlers.router)
     dp.include_router(other_handlers.router)
     
     await set_main_menu(bot)
     
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
     
 asyncio.run(main())
