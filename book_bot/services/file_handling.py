@@ -2,7 +2,7 @@ import os
 import sys
 
 
-BOOK_PATH = 'book/book.txt'
+BOOK_PATH = 'C:\\Users\\sarim\\OneDrive\\Рабочий стол\\python\\book_bot\\books\\book.txt'
 PAGE_SIZE = 1050
 
 
@@ -13,7 +13,7 @@ def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
     end = start+size
     
     if end >= len(text):
-        return text, len(text)
+        return text[start:], len(text)
     
     part_text = text[start:end]
     text = text + '  '
@@ -32,18 +32,28 @@ def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
                 if last_symbol > last_symbol_index:
                     last_symbol_index = last_symbol
     
+    if last_symbol_index <= 0:
+        return part_text, len(part_text)
     part_text = text[start:last_symbol_index+start+1]
     
     return part_text, len(part_text)
 
-def prepare_book(path: str):
-    pass
 
-
-# prepare_book(os.path.join(os.path[0], os.path.normpath(BOOK_PATH)))
-
-
-if __name__ == '__main__':
-    text = 'Раз.'
+def prepare_book(path: str, page_size: int = 1050) -> dict[int, str]:
     
-    print(_get_part_text(text, 5, 9), sep=',')
+    with open(path, 'r', encoding='utf-8') as file:
+        data = file.read()
+    
+    data_length = len(data)
+    prepared_book: dict[int, str] = {}
+    i = 1
+    start = 0
+    
+    while start < data_length:
+        new_data = data[start:]
+        text, text_length = _get_part_text(text=new_data, start=0, size=page_size)
+        prepared_book[i] = text.strip()
+        start += text_length
+        i += 1
+    
+    return prepared_book
