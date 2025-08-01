@@ -8,7 +8,7 @@ def create_bookmarks_keyboard(*args: int, book: dict) -> InlineKeyboardMarkup:
     for button in sorted(args):
         kb_builder.row(
             InlineKeyboardButton(
-                text=f"{button} - {button[button][:100]}",
+                text=f"{button} - {book[button][:100]}",
                 callback_data=str(button)
             )
         )
